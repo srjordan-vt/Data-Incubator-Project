@@ -1,0 +1,302 @@
+setwd("C:/Users/Sara/Desktop/Miscellaneous Work Files/R Projects/Abouts/TXT-- About")
+install.packages("tm")
+install.packages("SnowballC")
+## Import the required .txt files and make them into corpus that can be worked with.
+library(tm)
+
+
+#load document files into corpus
+Abouts <- list.files(getwd(),pattern="*.txt")
+Aboutfiles <- lapply(Abouts,readLines)
+Aboutdocs <- Corpus(VectorSource(Aboutfiles))
+#go to parent directory
+getwd()
+#Remove punctuation - replace punctuation marks with " "
+Aboutdocs <- tm_map(Aboutdocs, removePunctuation)
+#Transform to lower case
+Aboutdocs <- tm_map(Aboutdocs,content_transformer(tolower))
+#Strip digits
+Aboutdocs <- tm_map(Aboutdocs, removeNumbers)
+#Remove stopwords from standard stopword list 
+Aboutdocs <- tm_map(Aboutdocs, removeWords, stopwords("english"))
+#Strip whitespace (cosmetic?)
+Aboutdocs <- tm_map(Aboutdocs, stripWhitespace)
+#Create document-term matrix
+Aboutdtm <- DocumentTermMatrix(Aboutdocs)
+Aboutdtm
+rownames(Aboutdtm) <- Abouts
+
+#Load Topic models
+install.packages("topicmodels")
+library(topicmodels)
+#Run Latent Dirichlet Allocation (LDA) using Gibbs Sampling
+#set burn in
+burnin <-1000
+#set iterations
+iter<-2000
+#thin the spaces between samples
+thin <- 500
+#set random starts at 5
+nstart <-5
+#use random integers as seed 
+seed <- list(254672,109,122887,145629037,2)
+# return the highest probability as the result
+best <-TRUE
+#set number of topics. Start with bog standard 5, run at 26, 13, 5, and 2 
+k <-5
+
+#run the LDA model at k=5
+AboutldaOut <- LDA(Aboutdtm,k, method="Gibbs", control=
+                list(nstart=nstart, seed = seed, best=best, burnin = burnin, iter = iter, thin=thin))
+#view the top 6 terms for each of the 5 topics, create a matrix and write to csv
+terms(AboutldaOut,6)
+writeClipboard(terms(AboutldaOut,6))
+AboutldaOut.terms <- as.matrix(terms(AboutldaOut,6))
+#view the topic assignment for each document
+topics(AboutldaOut)
+#create a matrix and write to csv
+AboutldaOut.topics <-as.matrix(topics(AboutldaOut))
+write.csv(AboutldaOut.topics,file=paste("LDAGibbs",k,"DocsToTopics.csv"))
+hist(AboutldaOut.topics, col= "blue", border = NULL, main= "Histogram of About Topics, K=5", xlab= "Topic Number")
+#Find probabilities associated with each topic assignment
+AbouttopicProbabilities <- as.data.frame(AboutldaOut@gamma) 
+write.csv(AbouttopicProbabilities,file=paste("LDAGibbs",k,"TopicProbabilities.csv"))
+plot(AbouttopicProbabilities, col="blue", main="Topic Probabilities in About Statements, K=5")
+#investigate topic probabilities data.frame
+summary(AbouttopicProbabilities)
+str(AbouttopicProbabilities)
+
+## Re-run the model at k=26 to illustrate NTEE Codes
+k<-26
+AboutldaOut26 <- LDA(Aboutdtm,k, method="Gibbs", control=
+                     list(nstart=nstart, seed = seed, best=best, burnin = burnin, iter = iter, thin=thin))
+#view the top 6 terms for each of the 5 topics, create a matrix and write to csv
+terms(AboutldaOut26,6)
+AboutldaOut26.terms <- as.matrix(terms(AboutldaOut26,6))
+#view the topic assignment for each document
+topics(AboutldaOut26)
+#create a matrix and write to csv
+AboutldaOut26.topics <-as.matrix(topics(AboutldaOut26))
+write.csv(AboutldaOut26.topics,file=paste("LDAGibbs",k,"DocsToTopics26.csv"))
+#Find probabilities associated with each topic assignment
+AbouttopicProbabilities26 <- as.data.frame(AboutldaOut26@gamma) 
+write.csv(AbouttopicProbabilities26,file=paste("LDAGibbs",k,"TopicProbabilities26.csv"))
+#investigate topic probabilities data.frame
+summary(AbouttopicProbabilities26)
+str(AbouttopicProbabilities26)
+
+## Re-run the model at k=13
+k<-13
+AboutldaOut13 <- LDA(Aboutdtm,k, method="Gibbs", control=
+                       list(nstart=nstart, seed = seed, best=best, burnin = burnin, iter = iter, thin=thin))
+#view the top 6 terms for each of the 5 topics, create a matrix and write to csv
+terms(AboutldaOut13,6)
+AboutldaOut13.terms <- as.matrix(terms(AboutldaOut13,6))
+#view the topic assignment for each document
+topics(AboutldaOut13)
+#create a matrix and write to csv
+AboutldaOut13.topics <-as.matrix(topics(AboutldaOut13))
+write.csv(AboutldaOut13.topics,file=paste("LDAGibbs",k,"DocsToTopics13.csv"))
+#Find probabilities associated with each topic assignment
+AbouttopicProbabilities13 <- as.data.frame(AboutldaOut13@gamma) 
+write.csv(AbouttopicProbabilities13,file=paste("LDAGibbs",k,"TopicProbabilities13.csv"))
+#investigate topic probabilities data.frame
+summary(AbouttopicProbabilities13)
+str(AbouttopicProbabilities13)
+
+## Re-run the model at k=2
+k<-2
+AboutldaOut2 <- LDA(Aboutdtm,k, method="Gibbs", control=
+                       list(nstart=nstart, seed = seed, best=best, burnin = burnin, iter = iter, thin=thin))
+#view the top 6 terms for each of the 5 topics, create a matrix and write to csv
+terms(AboutldaOut2,6)
+AboutldaOut2.terms <- as.matrix(terms(AboutldaOut2,6))
+#view the topic assignment for each document
+topics(AboutldaOut2)
+#create a matrix and write to csv
+AboutldaOut2.topics <-as.matrix(topics(AboutldaOut2))
+write.csv(AboutldaOut2.topics,file=paste("LDAGibbs",k,"DocsToTopics2.csv"))
+#Find probabilities associated with each topic assignment
+AbouttopicProbabilities2 <- as.data.frame(AboutldaOut2@gamma) 
+write.csv(AbouttopicProbabilities2,file=paste("LDAGibbs",k,"TopicProbabilities2.csv"))
+#investigate topic probabilities data.frame
+summary(AbouttopicProbabilities2)
+str(AbouttopicProbabilities2)
+
+## THIS CODE IS FOR THE MISSIONS ONLY, CONTINUE FOR VISIONS
+setwd("C:/Users/Sara/Desktop/Miscellaneous Work Files/R Projects/Missions/TXT-- Missions")
+install.packages("tm")
+install.packages("SnowballC")
+## Import the required .txt files and make them into corpus that can be worked with.
+library(tm)
+#load document files into corpus
+Missions <- list.files(getwd(),pattern="*.txt")
+Missionsfiles <- lapply(Missions,readLines)
+Missionsdocs <- Corpus(VectorSource(Missionsfiles))
+#go to parent directory
+getwd()
+#Remove punctuation - replace punctuation marks with " "
+Missionsdocs <- tm_map(Missionsdocs, removePunctuation)
+#Transform to lower case
+Missionsdocs<- tm_map(Missionsdocs,content_transformer(tolower))
+#Strip digits
+Missionsdocs <- tm_map(Missionsdocs, removeNumbers)
+#Remove stopwords from standard stopword list 
+Missionsdocs <- tm_map(Missionsdocs, removeWords, stopwords("english"))
+#Strip whitespace (cosmetic?)
+Missionsdocs<- tm_map(Missionsdocs, stripWhitespace)
+#Create document-term matrix
+Missionsdtm <- DocumentTermMatrix(Missionsdocs)
+Missionsdtm
+rownames(Missionsdtm) <- Missions
+#Load Topic models
+install.packages("topicmodels")
+library(topicmodels)
+#Run Latent Dirichlet Allocation (LDA) using Gibbs Sampling
+#set burn in
+burnin <-1000
+#set iterations
+iter<-2000
+#thin the spaces between samples
+thin <- 500
+#set random starts at 5
+nstart <-5
+#use random integers as seed 
+seed <- list(254672,109,122887,145629037,2)
+# return the highest probability as the result
+best <-TRUE
+#set number of topics. Start with bog standard 5, run at 26 (NCEE), 13(NCEE*.5), 5, and 2 (Because why not?) 
+k <-5
+#run the LDA model at k=5
+MissionsldaOut <- LDA(Missionsdtm,k, method="Gibbs", control=
+                        list(nstart=nstart, seed = seed, best=best, burnin = burnin, iter = iter, thin=thin))
+#view the top 6 terms for each of the 5 topics, create a matrix and write to csv
+terms(MissionsldaOut,6)
+MissionsldaOut.terms <- as.matrix(terms(MissionsldaOut,6))
+#view the topic assignment for each document
+topics(MissionsldaOut)
+#create a matrix and write to csv
+MissionsldaOut.topics <-as.matrix(topics(MissionsldaOut))
+write.csv(MissionsldaOut.topics,file=paste("LDAGibbs",k,"MissionsDocsToTopics5.csv"))
+#Find probabilities associated with each topic assignment
+MissionstopicProbabilities <- as.data.frame(MissionsldaOut@gamma) 
+write.csv(MissionstopicProbabilities,file=paste("LDAGibbs",k,"MissionsTopicProbabilities5.csv"))
+#investigate topic probabilities data.frame
+summary(MissionstopicProbabilities)
+str(MissionstopicProbabilities)
+
+## Re-run the model at k=26
+k<-26
+MissionsldaOut26 <- LDA(Missionsdtm,k, method="Gibbs", control=
+                          list(nstart=nstart, seed = seed, best=best, burnin = burnin, iter = iter, thin=thin))
+#view the top 6 terms for each of the 5 topics, create a matrix and write to csv
+terms(MissionsldaOut26,6)
+MissionsldaOut26.terms <- as.matrix(terms(MissionsldaOut26,6))
+#view the topic assignment for each document
+topics(MissionsldaOut26)
+#create a matrix and write to csv
+MissionsldaOut26.topics <-as.matrix(topics(MissionsldaOut26))
+write.csv(MissionsldaOut26.topics,file=paste("LDAGibbs",k,"MissionsDocsToTopics26.csv"))
+#Find probabilities associated with each topic assignment
+MissionstopicProbabilities26 <- as.data.frame(MissionsldaOut26@gamma) 
+write.csv(MissionstopicProbabilities26,file=paste("LDAGibbs",k,"MissionsTopicProbabilities26.csv"))
+#investigate topic probabilities data.frame
+summary(MissionstopicProbabilities26)
+str(MissionstopicProbabilities26)
+
+## Re-run the model at k=13
+k<-13
+MissionsldaOut13 <- LDA(Missionsdtm,k, method="Gibbs", control=
+                          list(nstart=nstart, seed = seed, best=best, burnin = burnin, iter = iter, thin=thin))
+#view the top 6 terms for each of the 5 topics, create a matrix and write to csv
+terms(MissionsldaOut13,6)
+MissionsldaOut13.terms <- as.matrix(terms(MissionsldaOut13,6))
+#view the topic assignment for each document
+topics(MissionsldaOut13)
+#create a matrix and write to csv
+MissionsldaOut13.topics <-as.matrix(topics(MissionsldaOut13))
+write.csv(MissionsldaOut13.topics,file=paste("LDAGibbs",k,"MissionsDocsToTopics13.csv"))
+#Find probabilities associated with each topic assignment
+MissionstopicProbabilities13 <- as.data.frame(MissionsldaOut13@gamma) 
+write.csv(MissionstopicProbabilities13,file=paste("LDAGibbs",k,"MissionsTopicProbabilities13.csv"))
+#investigate topic probabilities data.frame
+summary(MissionstopicProbabilities13)
+str(MissionstopicProbabilities13)
+
+## Re-run the model at k=2
+k<-2
+MissionsldaOut2 <- LDA(Missionsdtm,k, method="Gibbs", control=
+                         list(nstart=nstart, seed = seed, best=best, burnin = burnin, iter = iter, thin=thin))
+#view the top 6 terms for each of the 5 topics, create a matrix and write to csv
+terms(MissionsldaOut2,6)
+MissionsldaOut2.terms <- as.matrix(terms(MissionsldaOut2,6))
+#view the topic assignment for each document
+topics(MissionsldaOut2)
+#create a matrix and write to csv
+MissionsldaOut2.topics <-as.matrix(topics(MissionsldaOut2))
+write.csv(MissionsldaOut2.topics,file=paste("LDAGibbs",k,"MissionsDocsToTopics2.csv"))
+#Find probabilities associated with each topic assignment
+MissionstopicProbabilities2 <- as.data.frame(MissionsldaOut2@gamma) 
+write.csv(MissionstopicProbabilities2,file=paste("LDAGibbs",k,"MissionsTopicProbabilities2.csv"))
+#investigate topic probabilities data.frame
+summary(MissionstopicProbabilities2)
+str(MissionstopicProbabilities2)
+
+## THIS CODE IS FOR THE VISIONS
+setwd("C:/Users/Sara/Desktop/Miscellaneous Work Files/R Projects/Visions/TXT-- Visions")
+## Import the required .txt files and make them into corpus that can be worked with.
+library(tm)
+#load document files into corpus
+Visions <- list.files(getwd(),pattern="*.txt")
+Visionsfiles <- lapply(Visions,readLines)
+Visionsdocs <- Corpus(VectorSource(Visionsfiles))
+#go to parent directory
+getwd()
+#Remove punctuation - replace punctuation marks with " "
+Visionsdocs <- tm_map(Visionsdocs, removePunctuation)
+#Transform to lower case
+Visionsdocs<- tm_map(Visionsdocs,content_transformer(tolower))
+#Strip digits
+Visionsdocs <- tm_map(Visionsdocs, removeNumbers)
+#Remove stopwords from standard stopword list 
+Visionsdocs <- tm_map(Visionsdocs, removeWords, stopwords("english"))
+#Strip whitespace (cosmetic?)
+Visionsdocs<- tm_map(Visionsdocs, stripWhitespace)
+#Create document-term matrix
+Visionsdtm <- DocumentTermMatrix(Visionsdocs)
+Visionsdtm
+rownames(Visionsdtm) <- Visions
+#Load Topic models
+library(topicmodels)
+#Run Latent Dirichlet Allocation (LDA) using Gibbs Sampling
+#set burn in
+burnin <-1000
+#set iterations
+iter<-2000
+#thin the spaces between samples
+thin <- 500
+#set random starts at 5
+nstart <-5
+#use random integers as seed 
+seed <- list(254672,109,122887,145629037,2)
+# return the highest probability as the result
+best <-TRUE
+#set number of topics. Start with bog standard 5, run at 26 (NCEE), 13(NCEE*.5), 5, and 2 (Because why not?) 
+k <-5
+#run the LDA model at k=5
+VisionsldaOut <- LDA(Visionsdtm,k, method="Gibbs", control=
+                       list(nstart=nstart, seed = seed, best=best, burnin = burnin, iter = iter, thin=thin))
+#view the top 6 terms for each of the 5 topics, create a matrix and write to csv
+terms(VisionsldaOut,6)
+VisionsldaOut.terms <- as.matrix(terms(VisionsldaOut,6))
+#view the topic assignment for each document
+topics(VisionsldaOut)
+#create a matrix and write to csv
+VisionsldaOut.topics <-as.matrix(topics(VisionsldaOut))
+write.csv(VisionsldaOut.topics,file=paste("LDAGibbs",k,"VisionsDocsToTopics5.csv"))
+#Find probabilities associated with each topic assignment
+VisionstopicProbabilities <- as.data.frame(VisionsldaOut@gamma) 
+write.csv(VisionstopicProbabilities,file=paste("LDAGibbs",k,"VisionsTopicProbabilities5.csv"))
+#investigate topic probabilities data.frame
+summary(VisionstopicProbabilities)
+str(VisionstopicProbabilities)
