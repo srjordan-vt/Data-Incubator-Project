@@ -1,9 +1,9 @@
+## This code is for the About files. About file graphs will be Blue
 setwd("C:/Users/Sara/Desktop/Miscellaneous Work Files/R Projects/Abouts/TXT-- About")
 install.packages("tm")
 install.packages("SnowballC")
 ## Import the required .txt files and make them into corpus that can be worked with.
 library(tm)
-
 
 #load document files into corpus
 Abouts <- list.files(getwd(),pattern="*.txt")
@@ -78,9 +78,11 @@ topics(AboutldaOut26)
 #create a matrix and write to csv
 AboutldaOut26.topics <-as.matrix(topics(AboutldaOut26))
 write.csv(AboutldaOut26.topics,file=paste("LDAGibbs",k,"DocsToTopics26.csv"))
+hist(AboutldaOut26.topics, col= "blue", border = NULL, main= "Histogram of About Topics, K=26", xlab= "Topic Number")
 #Find probabilities associated with each topic assignment
 AbouttopicProbabilities26 <- as.data.frame(AboutldaOut26@gamma) 
 write.csv(AbouttopicProbabilities26,file=paste("LDAGibbs",k,"TopicProbabilities26.csv"))
+plot(AboutldaOut26.topics, col="blue", main="Topic Probabilities in About Statements, K=26", xlab= "Organizations", ylab="Topics")
 #investigate topic probabilities data.frame
 summary(AbouttopicProbabilities26)
 str(AbouttopicProbabilities26)
@@ -97,9 +99,11 @@ topics(AboutldaOut13)
 #create a matrix and write to csv
 AboutldaOut13.topics <-as.matrix(topics(AboutldaOut13))
 write.csv(AboutldaOut13.topics,file=paste("LDAGibbs",k,"DocsToTopics13.csv"))
+hist(AboutldaOut13.topics, col= "blue", border = NULL, main= "Histogram of About Topics, K=13", xlab= "Topic Number")
 #Find probabilities associated with each topic assignment
 AbouttopicProbabilities13 <- as.data.frame(AboutldaOut13@gamma) 
 write.csv(AbouttopicProbabilities13,file=paste("LDAGibbs",k,"TopicProbabilities13.csv"))
+plot(AboutldaOut13.topics, col="blue", main="Topic Probabilities in About Statements, K=13", xlab= "Organizations", ylab="Topics")
 #investigate topic probabilities data.frame
 summary(AbouttopicProbabilities13)
 str(AbouttopicProbabilities13)
@@ -116,14 +120,16 @@ topics(AboutldaOut2)
 #create a matrix and write to csv
 AboutldaOut2.topics <-as.matrix(topics(AboutldaOut2))
 write.csv(AboutldaOut2.topics,file=paste("LDAGibbs",k,"DocsToTopics2.csv"))
+hist(AboutldaOut2.topics, col= "blue", border = NULL, main= "Histogram of About Topics, K=2", xlab= "Topic Number")
 #Find probabilities associated with each topic assignment
 AbouttopicProbabilities2 <- as.data.frame(AboutldaOut2@gamma) 
 write.csv(AbouttopicProbabilities2,file=paste("LDAGibbs",k,"TopicProbabilities2.csv"))
+plot(AboutldaOut2.topics, col="blue", main="Topic Probabilities in About Statements, K=2", xlab="Organizations", ylab="Topics")
 #investigate topic probabilities data.frame
 summary(AbouttopicProbabilities2)
 str(AbouttopicProbabilities2)
 
-## THIS CODE IS FOR THE MISSIONS ONLY, CONTINUE FOR VISIONS
+## THIS CODE IS FOR THE MISSIONS ONLY, CONTINUE FOR VISIONS. MISSIONS WILL BE REPRESENTED IN GREEN
 setwd("C:/Users/Sara/Desktop/Miscellaneous Work Files/R Projects/Missions/TXT-- Missions")
 install.packages("tm")
 install.packages("SnowballC")
@@ -150,7 +156,7 @@ Missionsdtm <- DocumentTermMatrix(Missionsdocs)
 Missionsdtm
 rownames(Missionsdtm) <- Missions
 #Load Topic models
-install.packages("topicmodels")
+
 library(topicmodels)
 #Run Latent Dirichlet Allocation (LDA) using Gibbs Sampling
 #set burn in
@@ -178,9 +184,11 @@ topics(MissionsldaOut)
 #create a matrix and write to csv
 MissionsldaOut.topics <-as.matrix(topics(MissionsldaOut))
 write.csv(MissionsldaOut.topics,file=paste("LDAGibbs",k,"MissionsDocsToTopics5.csv"))
+hist(MissionsldaOut.topics, col= "blue", border = NULL, main= "Histogram of Mission Topics, K=5", xlab= "Topic Number")
 #Find probabilities associated with each topic assignment
 MissionstopicProbabilities <- as.data.frame(MissionsldaOut@gamma) 
 write.csv(MissionstopicProbabilities,file=paste("LDAGibbs",k,"MissionsTopicProbabilities5.csv"))
+plot(MissionstopicProbabilities, col="blue", main="Topic Probabilities in Mission Statements, K=5")
 #investigate topic probabilities data.frame
 summary(MissionstopicProbabilities)
 str(MissionstopicProbabilities)
@@ -197,9 +205,11 @@ topics(MissionsldaOut26)
 #create a matrix and write to csv
 MissionsldaOut26.topics <-as.matrix(topics(MissionsldaOut26))
 write.csv(MissionsldaOut26.topics,file=paste("LDAGibbs",k,"MissionsDocsToTopics26.csv"))
+hist(MissionsldaOut26.topics, col= "blue", border = NULL, main= "Histogram of Mission Topics, K=26", xlab= "Topic Number")
 #Find probabilities associated with each topic assignment
 MissionstopicProbabilities26 <- as.data.frame(MissionsldaOut26@gamma) 
 write.csv(MissionstopicProbabilities26,file=paste("LDAGibbs",k,"MissionsTopicProbabilities26.csv"))
+plot(MissionstopicProbabilities26, col="blue", main="Topic Probabilities in Mission Statements, K=26")
 #investigate topic probabilities data.frame
 summary(MissionstopicProbabilities26)
 str(MissionstopicProbabilities26)
@@ -216,9 +226,12 @@ topics(MissionsldaOut13)
 #create a matrix and write to csv
 MissionsldaOut13.topics <-as.matrix(topics(MissionsldaOut13))
 write.csv(MissionsldaOut13.topics,file=paste("LDAGibbs",k,"MissionsDocsToTopics13.csv"))
+hist(MissionsldaOut13.topics, col= "blue", border = NULL, main= "Histogram of Mission Topics, K=13", xlab= "Topic Number")
 #Find probabilities associated with each topic assignment
 MissionstopicProbabilities13 <- as.data.frame(MissionsldaOut13@gamma) 
 write.csv(MissionstopicProbabilities13,file=paste("LDAGibbs",k,"MissionsTopicProbabilities13.csv"))
+plot(MissionstopicProbabilities13, col="blue", main="Topic Probabilities in Mission Statements, K=13")
+#investigate topic probabilities data.frame
 #investigate topic probabilities data.frame
 summary(MissionstopicProbabilities13)
 str(MissionstopicProbabilities13)
@@ -235,9 +248,11 @@ topics(MissionsldaOut2)
 #create a matrix and write to csv
 MissionsldaOut2.topics <-as.matrix(topics(MissionsldaOut2))
 write.csv(MissionsldaOut2.topics,file=paste("LDAGibbs",k,"MissionsDocsToTopics2.csv"))
+hist(MissionsldaOut2.topics, col= "blue", border = NULL, main= "Histogram of Mission Topics, K=2", xlab= "Topic Number")
 #Find probabilities associated with each topic assignment
 MissionstopicProbabilities2 <- as.data.frame(MissionsldaOut2@gamma) 
 write.csv(MissionstopicProbabilities2,file=paste("LDAGibbs",k,"MissionsTopicProbabilities2.csv"))
+plot(MissionstopicProbabilities2, col="blue", main="Topic Probabilities in Mission Statements, K=2")
 #investigate topic probabilities data.frame
 summary(MissionstopicProbabilities2)
 str(MissionstopicProbabilities2)
@@ -294,9 +309,12 @@ topics(VisionsldaOut)
 #create a matrix and write to csv
 VisionsldaOut.topics <-as.matrix(topics(VisionsldaOut))
 write.csv(VisionsldaOut.topics,file=paste("LDAGibbs",k,"VisionsDocsToTopics5.csv"))
+hist(VisionsldaOut.topics, col= "red", border = NULL, main= "Histogram of Vision Topics, K=5", xlab= "Topic Number")
 #Find probabilities associated with each topic assignment
 VisionstopicProbabilities <- as.data.frame(VisionsldaOut@gamma) 
 write.csv(VisionstopicProbabilities,file=paste("LDAGibbs",k,"VisionsTopicProbabilities5.csv"))
+plot(VisionstopicProbabilities, col="red", main="Topic Probabilities in Vision Statements, K=5")
+#investigate topic probabilities data.frame
 #investigate topic probabilities data.frame
 summary(VisionstopicProbabilities)
 str(VisionstopicProbabilities)
