@@ -19,7 +19,6 @@ At present, this project is at the “proof of concept” stage wherein I am str
 Using the material extracted, I performed preliminary text mining operations on the data.  Analysis of term frequencies, simple associations, and analysis of the data using k-means clustering and latent Dirichlet analysis (LDA) topic models were performed on three data sets—“Abouts”, “Missions”, and “Visions”.  
 These preliminary analyses revealed that “Mission” and “Vision” text is not wholly robust to high-level content analysis without substantial revisions to important parameters.  This is due in part to the size of this initial sample, the overall number and sparsity of terms, and the strong associations between terms across the data.  These important preliminaries point to the need for this proposed project to be better informed by the tools offered in this data science fellowship. 
 # GRAPHICS PRESENTED HERE
-A dendogram of clusters using k=10 is presented here to show that clusters that map well onto organizations' missions, as presented on their own sites, may not map onto intuitively obvious clusters.
 Results of an LDA (Latent Dirichlet Analysis) of the same sample of organizations to show that the terms uncovered and linked together by tools of text data analysis yield both surprising and unremarkable results. 
 
 
